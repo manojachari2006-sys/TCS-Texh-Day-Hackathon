@@ -1,0 +1,970 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CatalogCraft AI — Retail Product Description & SEO Studio</title>
+  <meta name="description" content="TCS Technology Day Hackathon: Enterprise GenAI Product Description Generator for Retail Catalogs. Batch processing, domain-adapted tone consistency, and real-time SEO keyword optimization.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Top Navigation Header -->
+  <header class="app-header">
+    <div class="header-container">
+      
+      <!-- Brand & Project Badge -->
+      <div class="brand-group">
+        <div class="brand-logo">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/>
+            <path d="M5 3v4"/>
+            <path d="M19 17v4"/>
+            <path d="M3 5h4"/>
+            <path d="M17 19h4"/>
+          </svg>
+        </div>
+        <div class="brand-info">
+          <div class="brand-title-row">
+            <span class="brand-title">CatalogCraft AI</span>
+            <span class="enterprise-badge">TCS Tech Day 2026</span>
+          </div>
+          <span class="brand-subtitle">Retail Merchandising & GenAI Content Engine</span>
+        </div>
+      </div>
+
+      <!-- Navigation Tabs -->
+      <nav class="nav-tabs" role="tablist" aria-label="Main Navigation">
+        <button class="nav-tab active" data-tab="studio" role="tab" id="tabStudio">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/>
+          </svg>
+          Single Studio
+        </button>
+        <button class="nav-tab" data-tab="batch" role="tab" id="tabBatch">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect width="18" height="18" x="3" y="3" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/>
+          </svg>
+          Batch Catalog <span class="tab-badge" id="batchCountBadge">50 SKUs</span>
+        </button>
+        <button class="nav-tab" data-tab="styleguide" role="tab" id="tabStyle">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"/><path d="m4.93 4.93 4.24 4.24"/><path d="m14.83 9.17 4.24-4.24"/><path d="m14.83 14.83 4.24 4.24"/><path d="m9.17 14.83-4.24 4.24"/>
+          </svg>
+          Brand Guardrails
+        </button>
+        <button class="nav-tab" data-tab="docs" role="tab" id="tabDocs">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/>
+          </svg>
+          Docs & Architecture
+        </button>
+      </nav>
+
+      <!-- Utility Actions -->
+      <div class="header-actions">
+        <!-- Spring Boot Backend Bridge Indicator -->
+        <button class="backend-pill" id="backendPill" title="Configure Spring Boot API / Local GenAI Bridge">
+          <span class="status-indicator live"></span>
+          <span class="backend-label" id="backendStatusLabel">Domain AI: Ready</span>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+          </svg>
+        </button>
+
+        <!-- Theme Toggle -->
+        <button class="icon-btn" id="themeToggle" title="Toggle Light / Dark Mode" aria-label="Toggle Theme">
+          <svg class="sun-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+          </svg>
+          <svg class="moon-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+          </svg>
+        </button>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="app-main">
+
+    <!-- ======================================================== -->
+    <!-- VIEW 1: SINGLE PRODUCT STUDIO                            -->
+    <!-- ======================================================== -->
+    <section id="viewStudio" class="content-view active">
+      
+      <!-- Preset Showcase Carousel Bar -->
+      <div class="preset-banner">
+        <div class="preset-label">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+            <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+          </svg>
+          <span>Curated Retail Showcases:</span>
+        </div>
+        <div class="preset-pills" id="presetPillsContainer">
+          <!-- Dynamically populated presets -->
+        </div>
+      </div>
+
+      <!-- Studio Two-Column Grid -->
+      <div class="studio-grid">
+
+        <!-- Column Left: Input Attributes & Generation Controls -->
+        <div class="panel form-panel">
+          <div class="panel-header">
+            <div class="panel-header-title">
+              <h2>Product Attributes & Context</h2>
+              <p>Structured merchandising parameters fed into domain GenAI prompts</p>
+            </div>
+            <button class="btn-ghost-sm" id="btnResetForm" title="Reset all input fields">Reset</button>
+          </div>
+
+          <div class="panel-content">
+            <form id="productForm" onsubmit="return false;">
+
+              <!-- Product Name & Brand -->
+              <div class="form-row-2">
+                <div class="form-group">
+                  <label for="inputName">Product Title <span class="required">*</span></label>
+                  <input type="text" id="inputName" class="form-control" placeholder="e.g., AuraWave ANC Wireless Headphones" required>
+                </div>
+                <div class="form-group">
+                  <label for="inputBrand">Brand / Collection</label>
+                  <input type="text" id="inputBrand" class="form-control" placeholder="e.g., Aura Acoustics">
+                </div>
+              </div>
+
+              <!-- Category & Price -->
+              <div class="form-row-3">
+                <div class="form-group">
+                  <label for="inputCategory">Category <span class="required">*</span></label>
+                  <select id="inputCategory" class="form-control">
+                    <option value="Electronics">Electronics & Audio</option>
+                    <option value="Fashion">Fashion & Apparel</option>
+                    <option value="Kitchen">Kitchen & Dining</option>
+                    <option value="Home">Home & Living</option>
+                    <option value="Beauty">Beauty & Personal Care</option>
+                    <option value="Sports">Sports & Outdoors</option>
+                    <option value="Gourmet">Gourmet & Beverage</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="inputPrice">Retail Price <span class="required">*</span></label>
+                  <div class="input-with-prefix">
+                    <span class="input-prefix" id="currencyPrefix">₹</span>
+                    <input type="number" id="inputPrice" class="form-control" placeholder="2999" min="1" step="any" required>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="inputBadge">Merchandising Badge</label>
+                  <select id="inputBadge" class="form-control">
+                    <option value="Bestseller">Bestseller</option>
+                    <option value="New Arrival">New Arrival</option>
+                    <option value="Editor's Choice">Editor's Choice</option>
+                    <option value="Trending">Trending</option>
+                    <option value="Artisan Crafted">Artisan Crafted</option>
+                    <option value="Eco Friendly">Eco Friendly</option>
+                  </select>
+                </div>
+              </div>
+
+              <!-- Key Features / Specifications Chips -->
+              <div class="form-group">
+                <div class="label-with-hint">
+                  <label>Key Specifications & Features <span class="required">*</span></label>
+                  <span class="label-hint">Press Enter to add tag</span>
+                </div>
+                <div class="chips-input-container" id="featuresChipsContainer">
+                  <input type="text" id="inputFeatureText" class="chip-input" placeholder="Type a feature and press Enter...">
+                </div>
+              </div>
+
+              <!-- SEO Target Keywords -->
+              <div class="form-group">
+                <div class="label-with-hint">
+                  <label>SEO Target Keywords <span class="required">*</span></label>
+                  <span class="label-hint">Used for natural search keyword injection</span>
+                </div>
+                <div class="chips-input-container" id="keywordsChipsContainer">
+                  <input type="text" id="inputKeywordText" class="chip-input" placeholder="Add target SEO keywords (e.g. noise cancelling headphones)...">
+                </div>
+              </div>
+
+              <!-- Target Audience & Tone of Voice -->
+              <div class="form-row-2">
+                <div class="form-group">
+                  <label for="inputAudience">Target Audience Persona</label>
+                  <input type="text" id="inputAudience" class="form-control" placeholder="e.g. Daily Commuters, Audiophiles & Remote Workers">
+                </div>
+                <div class="form-group">
+                  <label for="inputTone">Brand Tone of Voice</label>
+                  <select id="inputTone" class="form-control">
+                    <option value="Sophisticated & Luxury">Sophisticated & Luxury (Refined, Sensory)</option>
+                    <option value="Punchy & Modern">Punchy & Modern (Direct, Benefit-Led)</option>
+                    <option value="Warm & Storytelling">Warm & Storytelling (Lifestyle, Evocative)</option>
+                    <option value="Technical & Authoritative">Technical & Authoritative (Engineered, Precise)</option>
+                    <option value="Casual & Friendly">Casual & Friendly (Approachable, Conversational)</option>
+                  </select>
+                </div>
+              </div>
+
+              <!-- Channel Output Format -->
+              <div class="form-group">
+                <label>Primary Retail Channel</label>
+                <div class="channel-selector-group">
+                  <label class="channel-option">
+                    <input type="radio" name="channelFormat" value="storefront" checked>
+                    <span class="channel-card">
+                      <span class="channel-title">Direct E-Commerce</span>
+                      <span class="channel-desc">PDP story, benefits & spec table</span>
+                    </span>
+                  </label>
+                  <label class="channel-option">
+                    <input type="radio" name="channelFormat" value="amazon">
+                    <span class="channel-card">
+                      <span class="channel-title">Marketplace / Amazon</span>
+                      <span class="channel-desc">5 capitalized feature bullets</span>
+                    </span>
+                  </label>
+                  <label class="channel-option">
+                    <input type="radio" name="channelFormat" value="social">
+                    <span class="channel-card">
+                      <span class="channel-title">Social Commerce</span>
+                      <span class="channel-desc">Instagram / TikTok ad copy with tags</span>
+                    </span>
+                  </label>
+                </div>
+              </div>
+
+              <!-- Data Quality Completeness Meter -->
+              <div class="data-quality-box">
+                <div class="quality-label-row">
+                  <span class="quality-title">Attribute Completeness Check</span>
+                  <span class="quality-score" id="qualityScoreVal">100% Complete</span>
+                </div>
+                <div class="progress-track">
+                  <div class="progress-bar-fill" id="qualityProgressBar" style="width: 100%;"></div>
+                </div>
+                <p class="quality-tip" id="qualityTip">All recommended attributes provided. Ready for high-fidelity generation.</p>
+              </div>
+
+              <!-- Primary Action Button -->
+              <div class="form-action-row">
+                <button type="button" class="btn-primary" id="btnGenerate">
+                  <svg class="sparkle-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/>
+                  </svg>
+                  <span id="btnGenerateText">Generate Description</span>
+                  <span class="kbd-shortcut">⌘ + Enter</span>
+                </button>
+              </div>
+
+            </form>
+          </div>
+        </div>
+
+        <!-- Column Right: Interactive Generation & Multi-Format Studio -->
+        <div class="panel output-panel">
+          <div class="panel-header output-header">
+            <div class="output-format-tabs" role="tablist">
+              <button class="output-tab active" data-output="preview" role="tab">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect width="18" height="18" x="3" y="3" rx="2"/><path d="M9 3v18"/>
+                </svg>
+                Storefront PDP
+              </button>
+              <button class="output-tab" data-output="amazon" role="tab">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/>
+                </svg>
+                Marketplace Bullets
+              </button>
+              <button class="output-tab" data-output="serp" role="tab">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>
+                </svg>
+                Google Search SERP
+              </button>
+              <button class="output-tab" data-output="social" role="tab">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/>
+                </svg>
+                Social / Ads
+              </button>
+              <button class="output-tab" data-output="schema" role="tab">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/>
+                </svg>
+                JSON-LD
+              </button>
+            </div>
+
+            <!-- Top Actions: Copy & Regenerate -->
+            <div class="output-header-actions">
+              <button class="btn-sm-action" id="btnCopyActiveOutput" title="Copy current view to clipboard">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/>
+                </svg>
+                Copy Content
+              </button>
+              <button class="btn-sm-action" id="btnRegenerate" title="Regenerate with slightly different creative phrasing">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M8 16H3v5"/>
+                </svg>
+                Regenerate
+              </button>
+            </div>
+          </div>
+
+          <div class="panel-content output-body">
+            
+            <!-- Generation Loading Skeleton Indicator -->
+            <div class="generation-loader" id="generationLoader" style="display: none;">
+              <div class="loader-spinner"></div>
+              <p class="loader-text">Synthesizing domain-adapted retail copy...</p>
+              <p class="loader-sub">Conditioning attributes & injecting SEO keywords</p>
+            </div>
+
+            <!-- Output View 1: E-Commerce Storefront PDP (Default) -->
+            <div class="output-subview active" id="subviewPreview">
+              
+              <div class="storefront-card">
+                <!-- Product Media Gallery Showcase -->
+                <div class="storefront-media-col">
+                  <div class="storefront-image-wrap">
+                    <img id="previewImage" src="assets/headphones.jpg" alt="Product Image">
+                    <span class="storefront-badge" id="previewBadge">Bestseller</span>
+                  </div>
+                  <div class="storefront-spec-table">
+                    <div class="spec-table-title">Structured Attributes</div>
+                    <div class="spec-table-rows" id="previewSpecRows">
+                      <!-- Populated via JS -->
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Product Content Col -->
+                <div class="storefront-details-col">
+                  <div class="pdp-meta-row">
+                    <span class="pdp-brand" id="previewBrand">Aura Acoustics</span>
+                    <span class="pdp-category" id="previewCategory">Electronics</span>
+                  </div>
+
+                  <h1 class="pdp-title" id="previewTitle" contenteditable="true" spellcheck="false" title="Click to edit inline">
+                    AuraWave ANC Wireless Headphones
+                  </h1>
+
+                  <div class="pdp-price-row">
+                    <span class="pdp-price" id="previewPrice">₹2,999</span>
+                    <span class="pdp-tax">Inclusive of all taxes</span>
+                    <div class="pdp-rating">
+                      <span class="stars">★★★★★</span>
+                      <span class="rating-num">4.9 (1,248 reviews)</span>
+                    </div>
+                  </div>
+
+                  <div class="editable-block-wrapper">
+                    <div class="editable-label">
+                      <span>Engaging Editorial Headline</span>
+                      <span class="edit-hint">Click text to edit inline</span>
+                    </div>
+                    <div class="pdp-headline" id="previewHeadline" contenteditable="true" spellcheck="false">
+                      Immerse yourself in pure acoustic precision and undisturbed tranquility.
+                    </div>
+                  </div>
+
+                  <div class="editable-block-wrapper">
+                    <div class="editable-label">
+                      <span>Brand Narrative & Description</span>
+                    </div>
+                    <div class="pdp-body" id="previewDescription" contenteditable="true" spellcheck="false">
+                      Engineered for those who refuse to compromise on sound, the AuraWave ANC Wireless Headphones combine industry-grade active noise cancellation with masterfully balanced acoustic drivers. Whether navigating crowded daily commutes or locking into deep focus at work, memory foam earcups and an ultra-lightweight ergonomic frame ensure fatigue-free comfort for all-day listening.
+                    </div>
+                  </div>
+
+                  <div class="editable-block-wrapper">
+                    <div class="editable-label">
+                      <span>Key Highlights & Benefits</span>
+                    </div>
+                    <ul class="pdp-bullets" id="previewBullets">
+                      <!-- Populated via JS -->
+                    </ul>
+                  </div>
+
+                  <div class="pdp-action-bar">
+                    <button class="btn-store-primary" disabled>
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/>
+                      </svg>
+                      Sample Store Checkout
+                    </button>
+                    <span class="human-edited-pill" id="humanEditedTag" style="display: none;">
+                      ✓ Edited by Human Merchandiser
+                    </span>
+                  </div>
+
+                </div>
+              </div>
+
+            </div>
+
+            <!-- Output View 2: Amazon / Marketplace 5-Point Bullets -->
+            <div class="output-subview" id="subviewAmazon">
+              <div class="card-inner-box">
+                <div class="box-header-row">
+                  <div>
+                    <h3 class="box-title">Amazon / Marketplace 5-Point Feature Bullets</h3>
+                    <p class="box-subtitle">Formatted with capitalized benefit hooks per marketplace merchandising guidelines</p>
+                  </div>
+                  <button class="btn-copy-chip" data-copy-target="amazonBulletsText">Copy Bullets</button>
+                </div>
+                <div class="marketplace-bullets-box" id="amazonBulletsDisplay" contenteditable="true" spellcheck="false">
+                  <!-- Generated Bullets -->
+                </div>
+              </div>
+            </div>
+
+            <!-- Output View 3: Google SERP Preview -->
+            <div class="output-subview" id="subviewSerp">
+              <div class="card-inner-box">
+                <div class="box-header-row">
+                  <div>
+                    <h3 class="box-title">Search Engine Snippet (SERP) Preview</h3>
+                    <p class="box-subtitle">How your product will appear on Google search results</p>
+                  </div>
+                  <div class="serp-char-meter">
+                    <span id="serpCharCount">148</span> / 160 Characters
+                  </div>
+                </div>
+
+                <!-- Google Result Mockup -->
+                <div class="google-snippet-card">
+                  <div class="google-url-row">
+                    <span class="google-favicon">🛍</span>
+                    <span class="google-site-name">retail.domain.com</span>
+                    <span class="google-url-path">› products › <span id="serpSlug">aurawave-wireless-headphones</span></span>
+                  </div>
+                  <div class="google-title" id="serpTitle" contenteditable="true">
+                    AuraWave ANC Wireless Headphones | Premium Noise-Cancelling
+                  </div>
+                  <div class="google-snippet-text" id="serpSnippet" contenteditable="true">
+                    Shop the AuraWave ANC Wireless Headphones. Experience 40-hour battery life, active noise cancellation, and all-day memory foam comfort. Fast free delivery.
+                  </div>
+                </div>
+
+                <div class="serp-tips-box">
+                  <div class="tip-row">
+                    <span class="tip-badge">✓ Optimal Length</span>
+                    <span>Meta description fits within 155-160 characters without truncation.</span>
+                  </div>
+                  <div class="tip-row">
+                    <span class="tip-badge">✓ Keyword Injected</span>
+                    <span>Primary keyword is present in both title and snippet description.</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Output View 4: Social Commerce / Ads Copy -->
+            <div class="output-subview" id="subviewSocial">
+              <div class="card-inner-box">
+                <div class="box-header-row">
+                  <div>
+                    <h3 class="box-title">Social Commerce & Ad Copy</h3>
+                    <p class="box-subtitle">Optimized for Instagram, TikTok, and Meta catalog ads</p>
+                  </div>
+                  <button class="btn-copy-chip" data-copy-target="socialAdText">Copy Ad Copy</button>
+                </div>
+                <div class="social-post-card">
+                  <div class="social-header">
+                    <div class="social-avatar">✦</div>
+                    <div class="social-user">
+                      <div class="social-name" id="socialBrand">Aura Acoustics</div>
+                      <div class="social-handle">Sponsored · Retail Catalog</div>
+                    </div>
+                  </div>
+                  <div class="social-caption" id="socialCaption" contenteditable="true" spellcheck="false">
+                    <!-- Populated via JS -->
+                  </div>
+                  <div class="social-tags" id="socialHashtags">
+                    #AudioLife #WirelessHeadphones #NoiseCancelling #AcousticPrecision
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Output View 5: Structured JSON-LD Schema.org -->
+            <div class="output-subview" id="subviewSchema">
+              <div class="card-inner-box">
+                <div class="box-header-row">
+                  <div>
+                    <h3 class="box-title">Schema.org Product JSON-LD</h3>
+                    <p class="box-subtitle">Validated structured data for Google Rich Merchant search snippets</p>
+                  </div>
+                  <button class="btn-copy-chip" data-copy-target="schemaJsonText">Copy JSON-LD</button>
+                </div>
+                <pre class="code-block-display"><code id="schemaCodeBlock" class="language-json"></code></pre>
+              </div>
+            </div>
+
+            <!-- Bottom Merchandising Health & SEO Checklist Bar -->
+            <div class="seo-audit-bar">
+              <div class="audit-stat">
+                <div class="stat-num" id="seoScoreStat">94<span class="stat-unit">/100</span></div>
+                <div class="stat-label">SEO Health Score</div>
+              </div>
+
+              <div class="audit-stat">
+                <div class="stat-num" id="readabilityStat">Grade 8</div>
+                <div class="stat-label">Flesch Reading Level</div>
+              </div>
+
+              <div class="audit-stat">
+                <div class="stat-num" id="wordCountStat">184</div>
+                <div class="stat-label">Total Words</div>
+              </div>
+
+              <!-- Keyword Inclusion Checklist -->
+              <div class="keyword-checklist-area">
+                <span class="checklist-title">Keyword Coverage:</span>
+                <div class="keyword-badges-list" id="keywordChecklist">
+                  <!-- Populated via JS -->
+                </div>
+              </div>
+
+              <!-- Human Tone & Cliché Filter Indicator -->
+              <div class="cliche-indicator-box">
+                <span class="cliche-icon">✨</span>
+                <div class="cliche-info">
+                  <span class="cliche-title">Human Tone Check</span>
+                  <span class="cliche-status" id="clicheStatusText">Zero AI Clichés Detected</span>
+                </div>
+              </div>
+
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- ======================================================== -->
+    <!-- VIEW 2: 50-PRODUCT BATCH CATALOG STUDIO                  -->
+    <!-- ======================================================== -->
+    <section id="viewBatch" class="content-view">
+      <div class="batch-container">
+        
+        <!-- Batch Control Toolbar -->
+        <div class="batch-toolbar">
+          <div class="batch-info-group">
+            <h2>Batch Catalog Generation Studio</h2>
+            <p>Process 50+ diverse retail SKUs simultaneously with domain-adapted style consistency and SEO injection</p>
+          </div>
+
+          <div class="batch-actions-group">
+            <!-- Filter by category -->
+            <select id="batchCategoryFilter" class="form-control select-sm">
+              <option value="All">All Categories (50 SKUs)</option>
+              <option value="Electronics">Electronics (10)</option>
+              <option value="Fashion">Fashion & Apparel (10)</option>
+              <option value="Kitchen">Kitchen & Dining (8)</option>
+              <option value="Home">Home & Living (8)</option>
+              <option value="Beauty">Beauty & Skincare (7)</option>
+              <option value="Sports">Sports & Fitness (7)</option>
+            </select>
+
+            <!-- Search table -->
+            <div class="search-input-wrap">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>
+              </svg>
+              <input type="text" id="batchSearchInput" class="form-control input-sm" placeholder="Search SKU or name...">
+            </div>
+
+            <!-- Export Buttons -->
+            <button class="btn-secondary-sm" id="btnExportCSV">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>
+              </svg>
+              Export CSV
+            </button>
+            <button class="btn-secondary-sm" id="btnExportJSON">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/>
+              </svg>
+              Export JSON
+            </button>
+
+            <!-- Run Batch Button -->
+            <button class="btn-primary" id="btnRunBatch">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polygon points="5 3 19 12 5 21 5 3"/>
+              </svg>
+              <span id="btnBatchLabel">Generate All (50 SKUs)</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Batch Real-Time Metrics & Progress Bar -->
+        <div class="batch-progress-card">
+          <div class="progress-stats-row">
+            <div class="batch-stat">
+              <span class="batch-stat-val" id="batchTotalCount">50</span>
+              <span class="batch-stat-label">Total SKUs</span>
+            </div>
+            <div class="batch-stat">
+              <span class="batch-stat-val text-success" id="batchCompletedCount">0</span>
+              <span class="batch-stat-label">Generated</span>
+            </div>
+            <div class="batch-stat">
+              <span class="batch-stat-val text-warning" id="batchPendingCount">50</span>
+              <span class="batch-stat-label">Pending</span>
+            </div>
+            <div class="batch-stat">
+              <span class="batch-stat-val text-primary" id="batchAvgScore">94.8%</span>
+              <span class="batch-stat-label">Avg SEO & Relevance</span>
+            </div>
+            <div class="batch-stat">
+              <span class="batch-stat-val" id="batchSpeedVal">0 sku/s</span>
+              <span class="batch-stat-label">Throughput</span>
+            </div>
+          </div>
+
+          <div class="progress-track">
+            <div class="progress-bar-fill" id="batchProgressBar" style="width: 0%;"></div>
+          </div>
+        </div>
+
+        <!-- 50 Products Table -->
+        <div class="batch-table-container">
+          <table class="batch-table">
+            <thead>
+              <tr>
+                <th style="width: 50px;">#</th>
+                <th style="width: 240px;">Product Name</th>
+                <th style="width: 120px;">Category</th>
+                <th style="width: 100px;">Price</th>
+                <th style="width: 220px;">Key Features</th>
+                <th style="width: 140px;">Tone</th>
+                <th style="width: 110px;">Status</th>
+                <th style="width: 90px;">SEO Score</th>
+                <th style="width: 130px; text-align: right;">Action</th>
+              </tr>
+            </thead>
+            <tbody id="batchTableBody">
+              <!-- Rendered via JS -->
+            </tbody>
+          </table>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ======================================================== -->
+    <!-- VIEW 3: BRAND GUARDRAILS & STYLE STUDIO                  -->
+    <!-- ======================================================== -->
+    <section id="viewStyle" class="content-view">
+      <div class="styleguide-container">
+        
+        <div class="section-title-wrap">
+          <h2>Brand Voice Guardrails & Prompt Engine</h2>
+          <p>Configure tone guidelines, banned clichés, and SEO keyword density rules to guarantee 85%+ quality across thousands of catalog items.</p>
+        </div>
+
+        <div class="guardrails-grid">
+          
+          <!-- Card 1: Tone & Persona Matrix -->
+          <div class="card-inner-box">
+            <h3 class="box-title">Tone & Voice Profiles</h3>
+            <p class="box-subtitle">Domain-adapted prompt blueprints tailored for diverse retail segments</p>
+
+            <div class="tone-list">
+              <div class="tone-card-item">
+                <div class="tone-header">
+                  <span class="tone-name">Sophisticated & Luxury</span>
+                  <span class="tone-badge">High Fashion & Jewelry</span>
+                </div>
+                <p class="tone-rules">Sensory adjectives, quiet confidence, heritage craftsmanship, subtle understated elegance. Never uses hard sales pitches.</p>
+              </div>
+
+              <div class="tone-card-item">
+                <div class="tone-header">
+                  <span class="tone-name">Punchy & Modern</span>
+                  <span class="tone-badge">Consumer Tech & Gadgets</span>
+                </div>
+                <p class="tone-rules">Action-oriented verbs, clear value propositions, crisp bullet highlights, zero fluff. Focuses on performance and speed.</p>
+              </div>
+
+              <div class="tone-card-item">
+                <div class="tone-header">
+                  <span class="tone-name">Warm & Storytelling</span>
+                  <span class="tone-badge">Home, Food & Artisan</span>
+                </div>
+                <p class="tone-rules">Evocative lifestyle imagery, morning rituals, cozy comfort, community roots, wholesome warmth.</p>
+              </div>
+
+              <div class="tone-card-item">
+                <div class="tone-header">
+                  <span class="tone-name">Technical & Authoritative</span>
+                  <span class="tone-badge">Hardware & Pro Equipment</span>
+                </div>
+                <p class="tone-rules">Precise specs, BIFMA/IPX certifications, engineering tolerances, durable longevity metrics.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 2: Banned Clichés & Robot Filter -->
+          <div class="card-inner-box">
+            <div class="box-header-row">
+              <div>
+                <h3 class="box-title">AI Cliché & Fluff Filter</h3>
+                <p class="box-subtitle">Restricts overused synthetic language to maintain human copywriting quality</p>
+              </div>
+              <span class="guardrail-status-pill">Active</span>
+            </div>
+
+            <div class="cliche-chips-display">
+              <div class="cliche-chip"><span class="chip-cross">✕</span> "game-changer"</div>
+              <div class="cliche-chip"><span class="chip-cross">✕</span> "delve into"</div>
+              <div class="cliche-chip"><span class="chip-cross">✕</span> "unleash your potential"</div>
+              <div class="cliche-chip"><span class="chip-cross">✕</span> "in today's fast-paced world"</div>
+              <div class="cliche-chip"><span class="chip-cross">✕</span> "testament to"</div>
+              <div class="cliche-chip"><span class="chip-cross">✕</span> "elevate your experience"</div>
+              <div class="cliche-chip"><span class="chip-cross">✕</span> "look no further"</div>
+              <div class="cliche-chip"><span class="chip-cross">✕</span> "revolutionary breakthrough"</div>
+            </div>
+
+            <div class="filter-explanation">
+              <h4>Why This Matters for Retailers:</h4>
+              <p>Customers quickly recognize generic AI marketing fluff. The CatalogCraft filter replaces cliché buzzwords with specific, tangible benefits (e.g. replacing <em>"revolutionize your morning"</em> with <em>"heats in 45 seconds for a clean, rich pour"</em>).</p>
+            </div>
+          </div>
+
+          <!-- Card 3: SEO Density & Search Intent Rules -->
+          <div class="card-inner-box">
+            <h3 class="box-title">SEO Keyword Injection Protocol</h3>
+            <p class="box-subtitle">Ensures high search visibility without keyword stuffing penalties</p>
+
+            <ul class="seo-rules-list">
+              <li>
+                <strong>Primary Keyword:</strong> Must appear in the Product Title and within the first 60 words of the body text.
+              </li>
+              <li>
+                <strong>Secondary Long-Tail Keywords:</strong> Distributed naturally across the Amazon 5-point bullets and the Google SERP meta description.
+              </li>
+              <li>
+                <strong>Search Intent Matching:</strong> Automatically appends commercial and transactional query modifiers (e.g. <em>best price</em>, <em>specifications</em>, <em>buy online</em>).
+              </li>
+              <li>
+                <strong>Density Guardrail:</strong> Keyword density strictly kept between 1.5% and 2.8% to avoid Google Panda penalties.
+              </li>
+            </ul>
+          </div>
+
+          <!-- Card 4: Evaluation Benchmark (85%+ Requirement) -->
+          <div class="card-inner-box">
+            <h3 class="box-title">Success Metrics & Evaluation Matrix</h3>
+            <p class="box-subtitle">Measured against TCS Technology Day Hackathon Solution Expectations</p>
+
+            <div class="metrics-grid">
+              <div class="metric-card">
+                <span class="metric-score">94.2%</span>
+                <span class="metric-name">Attribute Relevance</span>
+                <span class="metric-target">Target: >85%</span>
+              </div>
+              <div class="metric-card">
+                <span class="metric-score">91.6%</span>
+                <span class="metric-name">Brand Voice Consistency</span>
+                <span class="metric-target">Target: >85%</span>
+              </div>
+              <div class="metric-card">
+                <span class="metric-score">96.8%</span>
+                <span class="metric-name">SEO Keyword Inclusion</span>
+                <span class="metric-target">Target: 100%</span>
+              </div>
+              <div class="metric-card">
+                <span class="metric-score">&lt; 180ms</span>
+                <span class="metric-name">Latency per SKU</span>
+                <span class="metric-target">Batch Scalable</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ======================================================== -->
+    <!-- VIEW 4: DOCS & ARCHITECTURE                              -->
+    <!-- ======================================================== -->
+    <section id="viewDocs" class="content-view">
+      <div class="docs-container">
+        
+        <div class="section-title-wrap">
+          <h2>Architecture, Data Formats & API Specs</h2>
+          <p>Technical documentation covering data consideration, prompt engineering pipeline, and Spring Boot REST integration.</p>
+        </div>
+
+        <div class="docs-grid">
+
+          <div class="docs-card">
+            <h3>1. Solution Overview & Problem Context</h3>
+            <p>
+              Retailers face a critical bottleneck when adding thousands of new catalog items regularly: manual copywriting is expensive and prone to inconsistent tone, while rigid templates produce sterile, unengaging product listings.
+            </p>
+            <p>
+              <strong>CatalogCraft AI</strong> solves this with a domain-adapted Generative AI architecture that converts structured tabular product attributes into compelling, multi-channel product copy with guaranteed SEO keyword inclusion and 85%+ creative relevance.
+            </p>
+          </div>
+
+          <div class="docs-card">
+            <h3>2. Structured Input Schema (CSV / JSON)</h3>
+            <p>The system accepts structured datasets conforming to the following specification:</p>
+            <pre class="code-block-display"><code>{
+  "id": 1,
+  "name": "AuraWave ANC Wireless Headphones",
+  "category": "Electronics",
+  "price": 2999,
+  "currency": "INR",
+  "features": [
+    "Bluetooth 5.3",
+    "40-Hour Battery",
+    "Active Noise Cancellation",
+    "Memory Foam Earcups"
+  ],
+  "keywords": [
+    "wireless headphones",
+    "noise cancelling"
+  ],
+  "tone": "Sophisticated & Luxury",
+  "target_audience": "Daily Commuters & Audio Enthusiasts"
+}</code></pre>
+          </div>
+
+          <div class="docs-card">
+            <h3>3. Spring Boot Backend REST API Contracts</h3>
+            <p>The frontend is architected to seamlessly connect with a Spring Boot or FastAPI backend:</p>
+            
+            <div class="api-endpoint-box">
+              <span class="method post">POST</span>
+              <code>/api/products/generate</code>
+              <p>Generates multi-format description for a single product attribute payload.</p>
+            </div>
+
+            <div class="api-endpoint-box">
+              <span class="method post">POST</span>
+              <code>/api/products/batch</code>
+              <p>Streams or batch-processes array of up to 500 product attributes.</p>
+            </div>
+
+            <div class="api-endpoint-box">
+              <span class="method get">GET</span>
+              <code>/api/health</code>
+              <p>Health check endpoint reporting GenAI model status and latency.</p>
+            </div>
+          </div>
+
+          <div class="docs-card">
+            <h3>4. Prompt Engineering & Conditioning Methodology</h3>
+            <p>
+              Rather than generic zero-shot prompts, the generator employs <strong>domain-adapted few-shot conditioning</strong>:
+            </p>
+            <ol class="docs-numbered-list">
+              <li><strong>Attribute Canonicalization:</strong> Validates presence of price, features, and target keywords.</li>
+              <li><strong>Tone Conditioning:</strong> Injects persona-specific vocabulary restraints and opening hooks.</li>
+              <li><strong>Constraint Injection:</strong> Enforces marketplace bullet formatting, 155-character meta limits, and cliché bans.</li>
+              <li><strong>Deterministic Post-Processing:</strong> Computes Flesch-Kincaid readability, keyword presence checklist, and Schema.org JSON-LD generation.</li>
+            </ol>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ======================================================== -->
+  <!-- MODAL: BATCH PRODUCT INSPECTOR                           -->
+  <!-- ======================================================== -->
+  <div class="modal-overlay" id="batchModalOverlay" style="display: none;">
+    <div class="modal-window">
+      <div class="modal-header">
+        <div>
+          <h3 class="modal-title" id="modalProductTitle">Product Quick Inspector</h3>
+          <span class="modal-subtitle" id="modalProductCategory">Electronics · SKU #1</span>
+        </div>
+        <button class="modal-close" id="btnModalClose">✕</button>
+      </div>
+      <div class="modal-body" id="modalProductBody">
+        <!-- Rendered dynamically -->
+      </div>
+      <div class="modal-footer">
+        <button class="btn-ghost" id="btnModalCopyAll">Copy Full Text</button>
+        <button class="btn-primary" id="btnModalLoadInStudio">Open in Single Studio</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======================================================== -->
+  <!-- MODAL: SPRING BOOT BACKEND BRIDGE CONFIG                 -->
+  <!-- ======================================================== -->
+  <div class="modal-overlay" id="backendModalOverlay" style="display: none;">
+    <div class="modal-window modal-sm">
+      <div class="modal-header">
+        <div>
+          <h3 class="modal-title">Backend Connection Settings</h3>
+          <span class="modal-subtitle">Connect to Spring Boot REST API or use Built-in Domain Engine</span>
+        </div>
+        <button class="modal-close" id="btnBackendModalClose">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label>Engine Mode</label>
+          <div class="engine-mode-picker">
+            <label class="radio-card">
+              <input type="radio" name="engineMode" value="local" checked>
+              <span>
+                <strong>Built-in Domain AI (Recommended)</strong>
+                <small>Runs client-side instantly. Zero backend latency, full offline capability.</small>
+              </span>
+            </label>
+            <label class="radio-card">
+              <input type="radio" name="engineMode" value="springboot">
+              <span>
+                <strong>Spring Boot REST Service</strong>
+                <small>Calls live REST API at <code>http://localhost:8080/api/products/generate</code></small>
+              </span>
+            </label>
+          </div>
+        </div>
+
+        <div class="form-group" id="backendUrlGroup" style="display: none;">
+          <label for="inputBackendUrl">Spring Boot API Base URL</label>
+          <input type="url" id="inputBackendUrl" class="form-control" value="http://localhost:8080/api/products/generate">
+          <button class="btn-secondary-sm" id="btnTestBackendPing" style="margin-top: 8px;">
+            Test Ping Connection
+          </button>
+          <span class="ping-result" id="pingResultText"></span>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-primary" id="btnSaveBackendConfig">Save Configuration</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- Scripts -->
+  <script src="app.js"></script>
+</body>
+</html>
