@@ -1,0 +1,2 @@
+import { GeneratePanel } from "@/components/generate-panel";
+export default function GeneratePage(){return <div className="space-y-6"><div><div className="text-xs font-bold uppercase tracking-widest text-[#087f5b] mb-2">AI workspace</div><h1 className="text-3xl font-extrabold">Generate descriptions</h1><p className="text-sm text-[#7b8983] mt-2">Turn structured product facts into review-ready catalog copy.</p></div><GeneratePanel/></div>}

@@ -1,0 +1,3 @@
+import { db } from "@/lib/db";
+import { ok, apiError } from "@/lib/utils";
+export async function GET(){try{await db.$queryRaw`SELECT 1`;const provider=(process.env.AI_PROVIDER||"auto").toLowerCase();if(provider==="openai"&&!process.env.OPENAI_API_KEY)throw new Error("AI_PROVIDER=openai requires OPENAI_API_KEY");const ai=provider==="mock"||(!process.env.OPENAI_API_KEY&&provider==="auto")?"mock":"openai";return ok({status:"healthy",database:"connected",aiProvider:ai,model:ai==="mock"?"mock-v1":process.env.OPENAI_MODEL||"gpt-4o-mini",demoMode:ai==="mock",generationConcurrency:Math.max(1,Number(process.env.GENERATION_CONCURRENCY||3))})}catch(e){return apiError(e,"HEALTH_CHECK_FAILED",503)}}

@@ -1,0 +1,133 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Product {
+  id             String   @id @default(cuid())
+  sku            String   @unique
+  name           String
+  brand          String   @default("")
+  category       String
+  subcategory    String   @default("")
+  features       String[] @default([])
+  specifications String[] @default([])
+  price          Float
+  currency       String   @default("INR")
+  targetAudience String   @default("")
+  benefits       String[] @default([])
+  materials      String[] @default([])
+  color          String   @default("")
+  size           String   @default("")
+  availability   String   @default("In Stock")
+  imageUrl       String   @default("")
+  seoKeywords    String[] @default([])
+  status         String   @default("ACTIVE")
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  descriptions   GeneratedDescription[]
+  jobs           GenerationJob[]
+
+  @@index([category])
+  @@index([status])
+  @@index([createdAt])
+}
+
+model GeneratedDescription {
+  id                    String   @id @default(cuid())
+  productId             String
+  styleProfileId        String?
+  title                 String
+  shortDescription      String
+  longDescription       String
+  sellingPoints         String[] @default([])
+  featureBenefits       String[] @default([])
+  seoTitle              String
+  metaDescription       String
+  seoKeywords           String[] @default([])
+  tags                  String[] @default([])
+  callToAction          String
+  qualityScore          Float    @default(0)
+  relevanceScore        Float    @default(0)
+  creativityScore       Float    @default(0)
+  seoScore              Float    @default(0)
+  completenessScore     Float    @default(0)
+  consistencyScore      Float    @default(0)
+  status                String   @default("PENDING")
+  model                 String   @default("mock-v1")
+  promptVersion         String   @default("1")
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+  product               Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  styleProfile          StyleProfile? @relation(fields: [styleProfileId], references: [id], onDelete: SetNull)
+  feedback              Feedback[]
+
+  @@index([productId])
+  @@index([status])
+}
+
+model StyleProfile {
+  id                  String   @id @default(cuid())
+  name                String   @unique
+  brandName           String   @default("")
+  tone                String   @default("Friendly")
+  writingStyle        String   @default("")
+  targetAudience      String   @default("")
+  preferredVocabulary String[] @default([])
+  avoidedVocabulary   String[] @default([])
+  descriptionLength   String   @default("Standard")
+  sentenceStyle       String   @default("Clear and concise")
+  ctaStyle            String   @default("Helpful")
+  brandGuidelines     String   @default("")
+  isActive            Boolean  @default(false)
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+  descriptions        GeneratedDescription[]
+  batches             GenerationBatch[]
+}
+
+model GenerationBatch {
+  id                String   @id @default(cuid())
+  name              String
+  status            String   @default("Pending")
+  totalProducts     Int      @default(0)
+  completedProducts Int      @default(0)
+  failedProducts    Int      @default(0)
+  styleProfileId    String?
+  startedAt         DateTime?
+  completedAt       DateTime?
+  createdAt         DateTime @default(now())
+  styleProfile      StyleProfile? @relation(fields: [styleProfileId], references: [id], onDelete: SetNull)
+  jobs              GenerationJob[]
+
+  @@index([status])
+}
+
+model GenerationJob {
+  id           String   @id @default(cuid())
+  batchId      String
+  productId    String
+  status       String   @default("Pending")
+  errorMessage String?
+  startedAt    DateTime?
+  completedAt  DateTime?
+  createdAt    DateTime @default(now())
+  batch        GenerationBatch @relation(fields: [batchId], references: [id], onDelete: Cascade)
+  product      Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  @@index([status])
+  @@index([batchId])
+}
+
+model Feedback {
+  id                     String   @id @default(cuid())
+  generatedDescriptionId String
+  rating                 Int?
+  thumbsUp               Boolean?
+  comment                String   @default("")
+  createdAt              DateTime @default(now())
+  generatedDescription   GeneratedDescription @relation(fields: [generatedDescriptionId], references: [id], onDelete: Cascade)
+}

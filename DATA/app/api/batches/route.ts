@@ -1,0 +1,3 @@
+import { db } from "@/lib/db";
+import { apiError, ok } from "@/lib/utils";
+export async function GET(){try{const batches=await db.generationBatch.findMany({include:{jobs:{include:{product:true},orderBy:{createdAt:"asc"}},styleProfile:true},orderBy:{createdAt:"desc"},take:100});return ok(await Promise.all(batches.map(async b=>{const avg=await db.generatedDescription.aggregate({where:{productId:{in:b.jobs.map(j=>j.productId)},createdAt:{gte:b.startedAt||b.createdAt,lte:b.completedAt||new Date()}},_avg:{qualityScore:true,seoScore:true}});return {...b,averageQuality:Math.round(avg._avg.qualityScore||0),averageSeo:Math.round(avg._avg.seoScore||0)}})))}catch(e){return apiError(e)}}

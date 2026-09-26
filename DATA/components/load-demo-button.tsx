@@ -1,0 +1,4 @@
+"use client";
+import { useState } from "react";
+import { Database, LoaderCircle } from "lucide-react";
+export function LoadDemoButton(){const [busy,setBusy]=useState(false),[message,setMessage]=useState("");return <div className="flex items-center gap-3"><button className="btn" disabled={busy} onClick={async()=>{setBusy(true);setMessage("");try{const r=await fetch("/api/demo",{method:"POST"});const j=await r.json();if(!r.ok)throw new Error(j.error?.message||"Could not load catalog");setMessage(`${j.data.loaded} products loaded`);location.reload()}catch(e){setMessage(e instanceof Error?e.message:"Load failed")}finally{setBusy(false)}}}>{busy?<LoaderCircle size={15} className="animate-spin"/>:<Database size={15}/>}Load Demo Catalog</button>{message&&<span role="status" className="text-xs text-[#087f5b]">{message}</span>}</div>}
